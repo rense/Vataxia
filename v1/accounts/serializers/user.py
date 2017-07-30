@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from v1.accounts.models.profile import Profile
@@ -36,17 +37,29 @@ class UserSerializer(serializers.ModelSerializer):
             return constants.USER_ROLE_MODERATOR
 
 
-class UserSerializerCreate(UserSerializer):
+class UserSerializerCreate(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'password')
+
+    def validate(self, data):
+        """
+        Administrator permissions needed
+        """
+
+        if not is_administrator(self.context['request'].user):
+            raise serializers.ValidationError(constants.PERMISSION_ADMINISTRATOR_REQUIRED)
+        return data
 
     @staticmethod
-    def validate_email(value):
+    def validate_password(password):
         """
-        Check the email is unique
+        Validate password
         """
 
-        if User.objects.filter(email=value):
-            raise serializers.ValidationError('Email already exists')
-        return value
+        validate_password(password)
+        return password
 
 
 class UserSerializerLogin(UserSerializer):

@@ -3,8 +3,13 @@
 .DS_Store
 .idea
 __pycache__
-node_modules
 
 # Migrations
 **/migrations/*
 !**/migrations/__init__.py
+
+# Application
+config/environment.py
+config/settings/development.py
+config/settings/production.py
+media/*

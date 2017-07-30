@@ -8,6 +8,8 @@ INSTALLED_APPS = [
 
     # API (v1)
     'v1.accounts.apps.AccountsConfig',
+    'v1.credits.apps.CreditsConfig',
+    'v1.filters.apps.FiltersConfig',
     'v1.posts.apps.PostsConfig',
     'v1.private_messages.apps.PrivateMessagesConfig',
     'v1.replies.apps.RepliesConfig',
@@ -56,7 +58,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
@@ -86,6 +88,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 CORS_ORIGIN_ALLOW_ALL = True
 
